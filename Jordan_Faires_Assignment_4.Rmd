@@ -1,0 +1,23 @@
+---
+title: "ESM 206 Assignment 4: Spiny Lobster Abundance"
+author: "Jordan Faires"
+date: "11/14/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load packages
+
+library(tidyverse)
+library(here)
+
+# Read in data 
+
+lobster_abundance <-read.csv("lobster_abundance_sbc_lter.csv")
+
+```
+
