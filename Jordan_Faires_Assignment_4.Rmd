@@ -22,6 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(here)
 library(janitor)
+library(RColorBrewer)
 
 # Read in data, clean names
 
@@ -81,7 +82,26 @@ lobster_size_diff <- lobster_tidy %>%
   filter(year == 2012 | year == 2018)
   
 ggplot(lobster_size_diff, aes(x = site, y = size_mm)) +
-         geom_violin(aes(fill = as.factor(year)))
+         geom_violin(aes(fill = as.factor(year)), 
+                     position = position_dodge(0.9)) +
+  geom_boxplot(aes(fill = as.factor(year)), 
+               alpha = .5, 
+               position = position_dodge(0.9), 
+               width = .25) +
+  theme_minimal() +
+  scale_fill_brewer(palette="Pastel2") +
+  labs(x = "",
+       y = "Size (mm)",
+       title = "Size Distribution of Observed Lobsters, 2012 and 2018") +
+  scale_x_discrete(labels = c("Arroyo \nQuemado",
+                              "Carpenteria",
+                              "Isla Vista \n(MPA)",
+                              "Mohawk",
+                              "Naples \n(MPA)")) +
+    theme(panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.background = element_rect(fill = "gray99", size = .1)) +
+  labs(fill = "Year")
   
 
 ```
