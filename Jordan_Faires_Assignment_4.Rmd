@@ -36,7 +36,7 @@ lobster_tidy <- lobster_abundance %>%
 
 ```
 
-Results A:
+# Results A:
 
 ```{r}
 # Group & summarize lobster data for each location by year
@@ -72,4 +72,18 @@ ggplot(lobster_ysite, aes(x=year, y=n, group=site, color=site)) +
 ***Figure 1. Annual count of California Spiny Lobsters at five sampling locations in Santa Barbara County, California, 2012 to 2018.*** *Sampling locations located within a Marine Protected Area are indicated in the legend.*
 
 The annual number of lobsters observed at all sampling locations appears to be increasing overall between 2012 to 2018. However, some locations saw much greater increases in the numbers of lobsters observed over time. The locations within marine protected areas (Isla Vista and Naples) where the only two locations to see an increase in the annual count of lobsters between 2017 and 2018. 
+
+# Results B:
+
+```{r}
+
+lobster_size_diff <- lobster_tidy %>%
+  filter(year == 2012 | year == 2018)
+  
+ggplot(lobster_size_diff, aes(x = site, y = size_mm)) +
+         geom_violin(aes(fill = as.factor(year)))
+  
+
+```
+
 
