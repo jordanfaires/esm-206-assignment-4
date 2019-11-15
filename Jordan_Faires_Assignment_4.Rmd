@@ -54,7 +54,7 @@ ggplot(lobster_ysite, aes(x=year, y=n, group=site, color=site)) +
   scale_y_continuous(expand = c(0,0)) +
   labs(x = "",
        y = "Annual Count",
-       title = "Annual California Spiny Lobster Counts") +
+       title = "Annual Count of California Spiny Lobsters") +
     scale_color_discrete(breaks=c("AQUE", 
                                   "CARP", 
                                   "IVEE", 
@@ -65,8 +65,9 @@ ggplot(lobster_ysite, aes(x=year, y=n, group=site, color=site)) +
                                 "Isla Vista (Marine Protected Area)", 
                                 "Mohawk", 
                                 "Naples (Marine Protected Area)")) +
-  theme(legend.position = c(0.25, 0.65))
-
+  theme(legend.position = c(0.25, 0.7)) +
+  theme(legend.title = element_blank())
 
 ```
+***Figure 1. Annual count of California Spiny Lobsters at five sites in Santa Barbara County, California, 2012 to 2018.*** *Sampling locations located within a Marine Protected Area are indicated in the legend.*
 
