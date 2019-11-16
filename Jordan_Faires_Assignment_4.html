@@ -468,9 +468,64 @@ ggplot(lobster_size_diff, aes(x = site, y = size_mm)) +
 </div>
 <div id="results-c" class="section level1">
 <h1>Results C</h1>
-<pre class="r"><code># Assign MPA / non-MPA status to each site 
+<pre class="r"><code># Assign MPA / non-MPA status 
 lobster_mpa &lt;- lobster_tidy %&gt;%
-  mutate(mpa = ifelse(site %in% c(&quot;IVEE&quot;, &quot;NAPL&quot;), &quot;mpa&quot;, &quot;non_mpa&quot;))</code></pre>
+  filter(site %in% c(&quot;IVEE&quot;, &quot;NAPL&quot;))
+
+lobster_non_mpa &lt;- lobster_tidy %&gt;% 
+  filter(site %in% c(&quot;MOHK&quot;, &quot;AQUE&quot;, &quot;CARP&quot;))</code></pre>
+<pre class="r"><code># Question 1 - For 2012 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
+
+# Filter for 2012 in both data sets
+
+lobster_mpa_2012 &lt;- lobster_mpa %&gt;% 
+  filter(year == 2012)
+
+lobster_non_mpa_2012 &lt;- lobster_non_mpa %&gt;% 
+  filter(year == 2012)
+
+# Two - sided t-test
+
+t_test_2012_size &lt;- t.test(lobster_mpa_2012$size_mm, lobster_non_mpa_2012$size_mm)
+  
+t_test_2012_size</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  lobster_mpa_2012$size_mm and lobster_non_mpa_2012$size_mm
+## t = -3.2516, df = 42.088, p-value = 0.002263
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -12.234960  -2.864287
+## sample estimates:
+## mean of x mean of y 
+##  67.37500  74.92462</code></pre>
+<p>In 2012, mean lobster size (mm) for MPA sites (67.38) and non-MPA sites (74.92) differed significantly (t(42.09) = -3.25, <em>p</em> = 0).</p>
+<pre class="r"><code># Question 2 - For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
+
+# Filter for 2018 in both data sets
+
+lobster_mpa_2018 &lt;- lobster_mpa %&gt;% 
+  filter(year == 2018)
+
+lobster_non_mpa_2018 &lt;- lobster_non_mpa %&gt;% 
+  filter(year == 2018)
+
+t_test_2018_size &lt;- t.test(lobster_mpa_2018$size_mm, lobster_non_mpa_2018$size_mm)
+
+t_test_2018_size</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  lobster_mpa_2018$size_mm and lobster_non_mpa_2018$size_mm
+## t = 7.3071, df = 1239.5, p-value = 4.876e-13
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  2.887090 5.006422
+## sample estimates:
+## mean of x mean of y 
+##  77.56672  73.61996</code></pre>
+<p>In 2018, mean lobster size (mm) for MPA sites (77.57) and non-MPA sites (74.92) also differed significantly (t(1239.51) = 7.31, <em>p</em> = 0). FIX THIS P VALUE.</p>
 </div>
 
 

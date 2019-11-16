@@ -113,13 +113,51 @@ The community size of sampled lobsters is relatively constant across site that a
 
 ```{r}
 
-# Assign MPA / non-MPA status to each site 
+# Assign MPA / non-MPA status 
 lobster_mpa <- lobster_tidy %>%
-  mutate(mpa = ifelse(site %in% c("IVEE", "NAPL"), "mpa", "non_mpa"))
+  filter(site %in% c("IVEE", "NAPL"))
 
-
-
+lobster_non_mpa <- lobster_tidy %>% 
+  filter(site %in% c("MOHK", "AQUE", "CARP"))
 
 ```
 
+```{r}
 
+# Question 1 - For 2012 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
+
+# Filter for 2012 in both data sets
+
+lobster_mpa_2012 <- lobster_mpa %>% 
+  filter(year == 2012)
+
+lobster_non_mpa_2012 <- lobster_non_mpa %>% 
+  filter(year == 2012)
+
+# Two - sided t-test
+
+t_test_2012_size <- t.test(lobster_mpa_2012$size_mm, lobster_non_mpa_2012$size_mm)
+  
+t_test_2012_size
+
+```
+In 2012, mean lobster size (mm) for MPA sites (`r round(t_test_2012_size$estimate[1],2)`) and non-MPA sites (`r round(t_test_2012_size$estimate[2],2)`) differed significantly (t(`r round(t_test_2012_size$parameter,2)`) = `r round(t_test_2012_size$statistic,2)`, *p* = `r round(t_test_2012_size$p.value,2)`). 
+
+```{r}
+# Question 2 - For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
+
+# Filter for 2018 in both data sets
+
+lobster_mpa_2018 <- lobster_mpa %>% 
+  filter(year == 2018)
+
+lobster_non_mpa_2018 <- lobster_non_mpa %>% 
+  filter(year == 2018)
+
+t_test_2018_size <- t.test(lobster_mpa_2018$size_mm, lobster_non_mpa_2018$size_mm)
+
+t_test_2018_size
+
+```
+
+In 2018, mean lobster size (mm) for MPA sites (`r round(t_test_2018_size$estimate[1],2)`) and non-MPA sites (`r round(t_test_2012_size$estimate[2],2)`) also differed significantly (t(`r round(t_test_2018_size$parameter,2)`) = `r round(t_test_2018_size$statistic,2)`, *p* = `r round(t_test_2018_size$p.value,2)`). FIX THIS P VALUE.
