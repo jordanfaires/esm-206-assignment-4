@@ -70,7 +70,7 @@ ggplot(lobster_ysite, aes(x=year, y=n, group=site, color=site)) +
   theme(legend.title = element_blank())
 
 ```
-***Figure 1. Annual count of California Spiny Lobsters at five sampling locations in Santa Barbara County, California, 2012 to 2018.*** *Sampling locations located within a Marine Protected Area are indicated in the legend.*
+***Figure 1.*** *Annual count of California Spiny Lobsters at five sampling locations in Santa Barbara County, California, 2012 to 2018. Sampling locations located within a Marine Protected Area are indicated in the legend.*
 
 The annual number of lobsters observed at all sampling locations appears to be increasing overall between 2012 to 2018. However, some locations saw much greater increases in the numbers of lobsters observed over time. The locations within marine protected areas (Isla Vista and Naples) where the only two locations to see an increase in the annual count of lobsters between 2017 and 2018. 
 
@@ -103,6 +103,22 @@ ggplot(lobster_size_diff, aes(x = site, y = size_mm)) +
         panel.background = element_rect(fill = "gray99", size = .1)) +
   labs(fill = "Year")
   
+
+```
+***Figure 2. Community size distribution (mm) of California Spiny Lobsters at five sampling locations in 2012 (green) and 2018 (orange).*** *Median is indicated by horizontal line, whiskers indicate a 95% confidence interval and points are individual outlying observations. Isla Vista and Naples sites are within Marine Protected Areas (MPAs).*
+
+The community size of sampled lobsters is relatively constant across site that are not Marine Protected Areas. The community size at Arroyo Quemado and Carpenteria appear to have slightly increased between 2012 and 2018, while the community size at Mohawk appears to have slightly decreased. However, the two MPA sites (Isla Vista and Naples) appear to have significant growth in community size between 2012 and 2018. 
+
+# Results C 
+
+```{r}
+
+# Assign MPA / non-MPA status to each site 
+lobster_mpa <- lobster_tidy %>%
+  mutate(mpa = ifelse(site %in% c("IVEE", "NAPL"), "mpa", "non_mpa"))
+
+
+
 
 ```
 
