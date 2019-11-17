@@ -160,4 +160,27 @@ t_test_2018_size
 
 ```
 
-In 2018, mean lobster size (mm) for MPA sites (`r round(t_test_2018_size$estimate[1],2)`) and non-MPA sites (`r round(t_test_2012_size$estimate[2],2)`) also differed significantly (t(`r round(t_test_2018_size$parameter,2)`) = `r round(t_test_2018_size$statistic,2)`, *p* = `r round(t_test_2018_size$p.value,2)`). FIX THIS P VALUE.
+In 2018, mean lobster size (mm) for MPA sites (`r round(t_test_2018_size$estimate[1],2)`) and non-MPA sites (`r round(t_test_2012_size$estimate[2],2)`) also differed significantly (t(`r round(t_test_2018_size$parameter,2)`) = `r round(t_test_2018_size$statistic,2)`, *p* = < 0.001).
+
+```{r}
+
+# Question 3 - For MPA sites only, is there a significant mean size difference in lobsters observed in 2012 vs. 2018?
+
+t_test_MPA_over_time <- t.test(lobster_mpa_2012$size_mm, lobster_mpa_2018$size_mm)
+
+t_test_MPA_over_time
+
+```
+
+Mean lobster size (mm) observed in Marine Protected Area sites (Isla Vista and Naples) in 2012 (`r round(t_test_MPA_over_time$estimate[1],2)`) and 2018 (`r round(t_test_MPA_over_time$estimate[2],2)`) also differed significantly (t(`r round(t_test_MPA_over_time$parameter,2)`) = `r round(t_test_MPA_over_time$statistic,2)`, *p* = < 0.001).
+
+```{r}
+
+# Question 4 For non-MPA sites only, is there a significant mean size difference in lobsters observed in 2012 vs. 2018?
+
+t_test_non_mpa_over_time <- t.test(lobster_non_mpa_2012$size_mm, lobster_non_mpa_2018$size_mm)
+
+t_test_non_mpa_over_time
+
+```
+

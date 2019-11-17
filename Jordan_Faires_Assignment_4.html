@@ -525,7 +525,40 @@ t_test_2018_size</code></pre>
 ## sample estimates:
 ## mean of x mean of y 
 ##  77.56672  73.61996</code></pre>
-<p>In 2018, mean lobster size (mm) for MPA sites (77.57) and non-MPA sites (74.92) also differed significantly (t(1239.51) = 7.31, <em>p</em> = 0). FIX THIS P VALUE.</p>
+<p>In 2018, mean lobster size (mm) for MPA sites (77.57) and non-MPA sites (74.92) also differed significantly (t(1239.51) = 7.31, <em>p</em> = &lt; 0.001).</p>
+<pre class="r"><code># Question 3 - For MPA sites only, is there a significant mean size difference in lobsters observed in 2012 vs. 2018?
+
+t_test_MPA_over_time &lt;- t.test(lobster_mpa_2012$size_mm, lobster_mpa_2018$size_mm)
+
+t_test_MPA_over_time</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  lobster_mpa_2012$size_mm and lobster_mpa_2018$size_mm
+## t = -4.6879, df = 32.496, p-value = 4.76e-05
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -14.617486  -5.765954
+## sample estimates:
+## mean of x mean of y 
+##  67.37500  77.56672</code></pre>
+<p>Mean lobster size (mm) observed in Marine Protected Area sites (Isla Vista and Naples) in 2012 (67.38) and 2018 (77.57) also differed significantly (t(32.5) = -4.69, <em>p</em> = &lt; 0.001).</p>
+<pre class="r"><code># Question 4 For non-MPA sites only, is there a significant mean size difference in lobsters observed in 2012 vs. 2018?
+
+t_test_non_mpa_over_time &lt;- t.test(lobster_non_mpa_2012$size_mm, lobster_non_mpa_2018$size_mm)
+
+t_test_non_mpa_over_time</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  lobster_non_mpa_2012$size_mm and lobster_non_mpa_2018$size_mm
+## t = 1.3343, df = 296.01, p-value = 0.1831
+## alternative hypothesis: true difference in means is not equal to 0
+## 95 percent confidence interval:
+##  -0.6196267  3.2289443
+## sample estimates:
+## mean of x mean of y 
+##  74.92462  73.61996</code></pre>
 </div>
 
 
