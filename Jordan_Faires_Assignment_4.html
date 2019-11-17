@@ -393,6 +393,7 @@ library(tidyverse)</code></pre>
 ## 
 ##     chisq.test, fisher.test</code></pre>
 <pre class="r"><code>library(RColorBrewer)
+library(effsize)
 
 # Read in data, clean names
 
@@ -500,7 +501,40 @@ t_test_2012_size</code></pre>
 ## sample estimates:
 ## mean of x mean of y 
 ##  67.37500  74.92462</code></pre>
-<p>In 2012, mean lobster size (mm) for MPA sites (67.38) and non-MPA sites (74.92) differed significantly (t(42.09) = -3.25, <em>p</em> = 0).</p>
+<pre class="r"><code># One sided - is MPA 2012 smaler than non-MPA 2012? 
+
+t_test_2012_directional &lt;- t.test(lobster_mpa_2012$size_mm,
+                                  lobster_non_mpa_2012$size_mm,
+                                  alternative = &quot;less&quot;)
+
+t_test_2012_directional</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  lobster_mpa_2012$size_mm and lobster_non_mpa_2012$size_mm
+## t = -3.2516, df = 42.088, p-value = 0.001131
+## alternative hypothesis: true difference in means is less than 0
+## 95 percent confidence interval:
+##       -Inf -3.644613
+## sample estimates:
+## mean of x mean of y 
+##  67.37500  74.92462</code></pre>
+<pre class="r"><code># Yes - MPA 2012 smaller than non-MPA 2012. 
+
+# Calculate effect size with Cohen's d
+
+mpa_nonmpa_2012_d &lt;- cohen.d(lobster_non_mpa_2012$size_mm,lobster_mpa_2012$size_mm)
+
+mpa_nonmpa_2012_d</code></pre>
+<pre><code>## 
+## Cohen's d
+## 
+## d estimate: 0.6098605 (medium)
+## 95 percent confidence interval:
+##     lower     upper 
+## 0.2304404 0.9892805</code></pre>
+<pre class="r"><code># Medium effect (-.61)</code></pre>
+<p>In 2012, the mean lobster size (mm) for MPA sites (67.38) is significantly less than mean lobster size for non-MPA (74.92) sites by a one-sided t-test (t(42.09) = -3.25, <em>p</em> = &lt; 0.001). The effect size by Cohen’s <em>d</em> is medium (0.61).</p>
 <pre class="r"><code># Question 2 - For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
 
 # Filter for 2018 in both data sets
@@ -525,7 +559,40 @@ t_test_2018_size</code></pre>
 ## sample estimates:
 ## mean of x mean of y 
 ##  77.56672  73.61996</code></pre>
-<p>In 2018, mean lobster size (mm) for MPA sites (77.57) and non-MPA sites (74.92) also differed significantly (t(1239.51) = 7.31, <em>p</em> = &lt; 0.001).</p>
+<pre class="r"><code># One sided - is MPA 2018 greater than non-MPA 2018? 
+
+t_test_2018_size_directional &lt;- t.test(lobster_mpa_2018$size_mm,
+                                       lobster_non_mpa_2018$size_mm,
+                                       alternative = &quot;greater&quot;)
+
+t_test_2018_size_directional</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  lobster_mpa_2018$size_mm and lobster_non_mpa_2018$size_mm
+## t = 7.3071, df = 1239.5, p-value = 2.438e-13
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  3.05766     Inf
+## sample estimates:
+## mean of x mean of y 
+##  77.56672  73.61996</code></pre>
+<pre class="r"><code># Yes - MPA 2018 greater than non-MPA 2018.
+
+# Calculate effect size with Cohen's d
+
+mpa_nonmpa_2018_d &lt;- cohen.d(lobster_mpa_2018$size_mm,lobster_non_mpa_2018$size_mm)
+
+mpa_nonmpa_2018_d</code></pre>
+<pre><code>## 
+## Cohen's d
+## 
+## d estimate: 0.3514986 (small)
+## 95 percent confidence interval:
+##     lower     upper 
+## 0.2510969 0.4519004</code></pre>
+<pre class="r"><code># Effect size small (.35)</code></pre>
+<p>In 2018, the mean lobster size (mm) for MPA sites (77.57) is significantly larger than mean lobster size for non-MPA (73.62) sites by a one-sided t-test (t(1239.51) = 7.31, <em>p</em> = &lt; 0.001). The effect size by Cohen’s <em>d</em> is small (0.35).</p>
 <pre class="r"><code># Question 3 - For MPA sites only, is there a significant mean size difference in lobsters observed in 2012 vs. 2018?
 
 t_test_MPA_over_time &lt;- t.test(lobster_mpa_2012$size_mm, lobster_mpa_2018$size_mm)
@@ -542,6 +609,39 @@ t_test_MPA_over_time</code></pre>
 ## sample estimates:
 ## mean of x mean of y 
 ##  67.37500  77.56672</code></pre>
+<pre class="r"><code># One sided - is MPA 2012 less than MPA 2018? (i.e. is MPA 2018 greater than MPA 2012?)
+
+t_test_mpa_time_directional &lt;- t.test(lobster_mpa_2018$size_mm, 
+                                      lobster_mpa_2012$size_mm, 
+                                      alternative = &quot;greater&quot;)
+
+t_test_mpa_time_directional</code></pre>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  lobster_mpa_2018$size_mm and lobster_mpa_2012$size_mm
+## t = 4.6879, df = 32.496, p-value = 2.38e-05
+## alternative hypothesis: true difference in means is greater than 0
+## 95 percent confidence interval:
+##  6.510779      Inf
+## sample estimates:
+## mean of x mean of y 
+##  77.56672  67.37500</code></pre>
+<pre class="r"><code># Yes - MPA 2018 greater than MPA 2012. 
+
+# Calculate effect size with Cohen's d
+
+mpa_over_time_d &lt;- cohen.d(lobster_mpa_2018$size_mm,lobster_mpa_2012$size_mm)
+
+mpa_over_time_d</code></pre>
+<pre><code>## 
+## Cohen's d
+## 
+## d estimate: 0.8700026 (large)
+## 95 percent confidence interval:
+##     lower     upper 
+## 0.5171437 1.2228615</code></pre>
+<pre class="r"><code># Effect large (.87)</code></pre>
 <p>Mean lobster size (mm) observed in Marine Protected Area sites (Isla Vista and Naples) in 2012 (67.38) and 2018 (77.57) also differed significantly (t(32.5) = -4.69, <em>p</em> = &lt; 0.001).</p>
 <pre class="r"><code># Question 4 For non-MPA sites only, is there a significant mean size difference in lobsters observed in 2012 vs. 2018?
 
@@ -559,6 +659,14 @@ t_test_non_mpa_over_time</code></pre>
 ## sample estimates:
 ## mean of x mean of y 
 ##  74.92462  73.61996</code></pre>
+<pre class="r"><code># No need for one sided here - not significantly different. </code></pre>
+<p>[Table]</p>
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
 </div>
 
 

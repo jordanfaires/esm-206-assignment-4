@@ -23,6 +23,7 @@ library(tidyverse)
 library(here)
 library(janitor)
 library(RColorBrewer)
+library(effsize)
 
 # Read in data, clean names
 
@@ -140,8 +141,27 @@ t_test_2012_size <- t.test(lobster_mpa_2012$size_mm, lobster_non_mpa_2012$size_m
   
 t_test_2012_size
 
+# One sided - is MPA 2012 smaler than non-MPA 2012? 
+
+t_test_2012_directional <- t.test(lobster_mpa_2012$size_mm,
+                                  lobster_non_mpa_2012$size_mm,
+                                  alternative = "less")
+
+t_test_2012_directional
+
+# Yes - MPA 2012 smaller than non-MPA 2012. 
+
+# Calculate effect size with Cohen's d
+
+mpa_nonmpa_2012_d <- cohen.d(lobster_non_mpa_2012$size_mm,lobster_mpa_2012$size_mm)
+
+mpa_nonmpa_2012_d
+
+# Medium effect (-.61)
+
 ```
-In 2012, mean lobster size (mm) for MPA sites (`r round(t_test_2012_size$estimate[1],2)`) and non-MPA sites (`r round(t_test_2012_size$estimate[2],2)`) differed significantly (t(`r round(t_test_2012_size$parameter,2)`) = `r round(t_test_2012_size$statistic,2)`, *p* = `r round(t_test_2012_size$p.value,2)`). 
+
+In 2012, the mean lobster size (mm) for MPA sites (`r round(t_test_2012_directional$estimate[1],2)`) is significantly less than mean lobster size for non-MPA (`r round(t_test_2012_directional$estimate[2],2)`) sites by a one-sided t-test (t(`r round(t_test_2012_directional$parameter,2)`) = `r round(t_test_2012_directional$statistic,2)`, *p* = < 0.001). The effect size by Cohen's *d* is medium (`r round(mpa_nonmpa_2012_d$estimate,2)`).
 
 ```{r}
 # Question 2 - For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
@@ -158,9 +178,27 @@ t_test_2018_size <- t.test(lobster_mpa_2018$size_mm, lobster_non_mpa_2018$size_m
 
 t_test_2018_size
 
+# One sided - is MPA 2018 greater than non-MPA 2018? 
+
+t_test_2018_size_directional <- t.test(lobster_mpa_2018$size_mm,
+                                       lobster_non_mpa_2018$size_mm,
+                                       alternative = "greater")
+
+t_test_2018_size_directional
+
+# Yes - MPA 2018 greater than non-MPA 2018.
+
+# Calculate effect size with Cohen's d
+
+mpa_nonmpa_2018_d <- cohen.d(lobster_mpa_2018$size_mm,lobster_non_mpa_2018$size_mm)
+
+mpa_nonmpa_2018_d
+
+# Effect size small (.35)
+
 ```
 
-In 2018, mean lobster size (mm) for MPA sites (`r round(t_test_2018_size$estimate[1],2)`) and non-MPA sites (`r round(t_test_2012_size$estimate[2],2)`) also differed significantly (t(`r round(t_test_2018_size$parameter,2)`) = `r round(t_test_2018_size$statistic,2)`, *p* = < 0.001).
+In 2018, the mean lobster size (mm) for MPA sites (`r round(t_test_2018_size_directional$estimate[1],2)`) is significantly larger than mean lobster size for non-MPA (`r round(t_test_2018_size_directional$estimate[2],2)`) sites by a one-sided t-test (t(`r round(t_test_2018_size_directional$parameter,2)`) = `r round(t_test_2018_size_directional$statistic,2)`, *p* = < 0.001). The effect size by Cohen's *d* is small (`r round(mpa_nonmpa_2018_d$estimate,2)`).
 
 ```{r}
 
@@ -170,6 +208,24 @@ t_test_MPA_over_time <- t.test(lobster_mpa_2012$size_mm, lobster_mpa_2018$size_m
 
 t_test_MPA_over_time
 
+# One sided - is MPA 2012 less than MPA 2018? (i.e. is MPA 2018 greater than MPA 2012?)
+
+t_test_mpa_time_directional <- t.test(lobster_mpa_2018$size_mm, 
+                                      lobster_mpa_2012$size_mm, 
+                                      alternative = "greater")
+
+t_test_mpa_time_directional
+
+# Yes - MPA 2018 greater than MPA 2012. 
+
+# Calculate effect size with Cohen's d
+
+mpa_over_time_d <- cohen.d(lobster_mpa_2018$size_mm,lobster_mpa_2012$size_mm)
+
+mpa_over_time_d
+
+# Effect large (.87)
+                                
 ```
 
 Mean lobster size (mm) observed in Marine Protected Area sites (Isla Vista and Naples) in 2012 (`r round(t_test_MPA_over_time$estimate[1],2)`) and 2018 (`r round(t_test_MPA_over_time$estimate[2],2)`) also differed significantly (t(`r round(t_test_MPA_over_time$parameter,2)`) = `r round(t_test_MPA_over_time$statistic,2)`, *p* = < 0.001).
@@ -182,5 +238,21 @@ t_test_non_mpa_over_time <- t.test(lobster_non_mpa_2012$size_mm, lobster_non_mpa
 
 t_test_non_mpa_over_time
 
+# No need for one sided here - not significantly different. 
+
 ```
+
+[Table]
+
+
+
+
+
+
+# Summary
+
+# References
+
+
+
 
