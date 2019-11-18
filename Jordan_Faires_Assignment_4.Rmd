@@ -24,6 +24,7 @@ library(here)
 library(janitor)
 library(RColorBrewer)
 library(effsize)
+library(DT)
 
 # Read in data, clean names
 
@@ -58,7 +59,7 @@ ggplot(lobster_ysite, aes(x=year, y=n, group=site, color=site)) +
   scale_y_continuous(expand = c(0,0)) +
   labs(x = "",
        y = "Annual Count",
-       title = "Annual Count of California Spiny Lobsters, 2012 - 2018") +
+       title = "Annual Count of California Spiny Lobsters, 2012 -2018") +
     scale_color_discrete(breaks=c("AQUE", 
                                   "CARP", 
                                   "IVEE", 
@@ -225,15 +226,43 @@ t_test_non_mpa_over_time <- t.test(lobster_non_mpa_2012$size_mm, lobster_non_mpa
 However, mean lobster size (mm) observed at non-MPA sites in 2012 (`r round(t_test_non_mpa_over_time$estimate[1],2)`) and 2018 (`r round(t_test_non_mpa_over_time$estimate[2],2)`) is not significantly different (t(`r round(t_test_non_mpa_over_time$parameter,2)`) = `r round(t_test_non_mpa_over_time$statistic,2)`, *p* = `r round (t_test_non_mpa_over_time$p.value,2)`)
 
 
-[Table]
+```{r}
+
+name = c("MPA Sites, 2012", "MPA Sites, 2018", "Non-MPA Sites, 2012", "Non-MPA Sites, 2018")
+mean = c(round(mean(lobster_mpa_2012$size_mm), 
+               digits = 3),
+         round(mean(lobster_mpa_2018$size_mm), 
+               digits = 3),
+         round(mean(lobster_mpa_2012$size_mm), 
+               digits = 3),
+         round(mean(lobster_mpa_2018$size_mm), 
+               digits = 3))
+sd = c(round(sd(lobster_mpa_2012$size_mm), 
+             digits = 3),
+       round(sd(lobster_mpa_2018$size_mm), 
+             digits = 3),
+       round(sd(lobster_non_mpa_2012$size_mm), 
+             digits = 3),
+       round(sd(lobster_non_mpa_2018$size_mm)))
+count = c(nrow(lobster_mpa_2012),
+           nrow(lobster_mpa_2018),
+           nrow(lobster_non_mpa_2012),
+           nrow(lobster_non_mpa_2018))
+
+table_df_lobster <- data.frame(name, count, mean, sd) %>%
+  datatable(colnames = c("Site Type and Year", "Sample Size", "Mean Lobster Length (mm)", "Standard Deviation"), options = list(dom = 't'))
+
+table_df_lobster
+
+```
 
 
 
 # Summary
 
-- The mean lobster size observed at Marine Protected Area (MPA) sites (Isla Vista and Naples) was smaller than the mean lobster size at non-MPA sites (Arroyo Quemado, Carpenteria and Mohawk) in 2012. However, the mean lobster size at MPA sites was greater than the mean size at non-MPA sites in 2018.  
-- At MPA sites, the number of lobsters observed increased between 2012 to 2018. The mean size of the lobsters observed at MPA sites also increased over this time period. 
-- The number of lobsters observed at non-MPA sites also increased between 2012 and 2018. However, there was no difference in mean lobster size between 2012 and 2018 for non-MPA sites. 
+- The mean lobster length observed at Marine Protected Area (MPA) sites (Isla Vista and Naples) was smaller than the mean lobster length at non-MPA sites (Arroyo Quemado, Carpenteria and Mohawk) in 2012. However, the mean lobster length at MPA sites was greater than the mean length at non-MPA sites in 2018.  
+- At MPA sites, the number of lobsters observed increased between 2012 to 2018. The mean length of the lobsters observed at MPA sites also increased significantly over this time period.
+- The number of lobsters observed at non-MPA sites also increased between 2012 and 2018. However, there was no difference in mean lobster length between 2012 and 2018 for non-MPA sites. 
 
 
 # References
