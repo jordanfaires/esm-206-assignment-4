@@ -1,7 +1,7 @@
 ---
-title: "ESM 206 Assignment 4: Spiny Lobster Abundance"
+title: "ESM 206 Assignment 4: Impact of Marine Protected Areas (MPAs) on California Spiny Lobster Size and Abundance"
 author: "Jordan Faires"
-date: "11/14/2019"
+date: "11/17/2019"
 output: html_document
 ---
 
@@ -11,17 +11,14 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 # Introduction 
 
-California spiny lobster (**Panulirus interruptus**) is an econom
-
-Due to their limited mobility and range, species such as the California spiny lobster are predicted to exhibit significant increases from the establishment of even a small MPA (Withy-Allen et al. 2013). Marine protected areas have positively impacted spiny lobster abundance and size in the Santa Barbara Channel Islands (Kay et al. 2012) Thus, the spiny lobster community abundance and size would be expected to increase after the establishment of similar MPAs in the Santa Barbara Channel. Here, we use data collected by SBC LTER to compare changes since 2012 in spiny lobster abundance and size in sites within MPAs and in sites outside of MPAs in the Santa Barbara Channel.
+The California spiny lobster (*Panulirus interruptus*) is an ecologically and economically important species in coastal California. However, the fishery has been subject to increasing recreational and commercial fishing pressure. New marine protected areas were established in 2012 under the California Marine Life Protection Area to serve multiple ecological benefits, incuding the creation of "safe zones" for lobster reproduction in the absence of fishing (California Department of Fish and Wildlife, 2016). Due to their limited mobility and range, species such as the California spiny lobster are predicted to exhibit significant population increases from the establishment of even a small MPA (Withy-Allen et al. 2013). Marine protected areas have positively impacted spiny lobster abundance and size in the Santa Barbara Channel Islands (Kay et al. 2012). Thus, the spiny lobster community abundance and size would be expected to increase after the establishment of similar MPAs along the mainland coast in the Santa Barbara Channel. Here, we use data collected by SBC LTER to compare changes since 2012 in spiny lobster abundance and size in sites within MPAs and in sites outside of MPAs in the Santa Barbara Channel.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/5/52/California_Spiny_Lobster.jpg)
 ***Figure 1.*** *California Spiny Lobster (Panulirus interruptus). Credit: [Wikimedia](https://commons.wikimedia.org/wiki/File:California_Spiny_Lobster.jpg)* 
 
-
 # Methods
 
-Data for California spiny lobster (Panulirus interruptus) abundance, length and location from 2012 to 2018 was collected by [Santa Barbara Term Ecological Research (SBC LTER) ](https://sbclter.msi.ucsb.edu/). Data collection began in 2012 and is ongoing. Abundance and size data is collected annually by divers in late summer across five survey locations along the mainland coast of the Santa Barbara Channel. Two locations (Isla Vista and Naples) are located within Marine Protected Areas (MPAs), while three locations (Arroyo Quemado, Mohawk and Carpenteria) are not. Mean spiny lobster length (mm) for MPA and non-MPA survey locations in 2012 and 2018 were compared by two-sample t-tests ($\alpha$ = 0.05). Analyses and figures were prepared using R software version 3.6.1. 
+Data for California spiny lobster abundance, length and location from 2012 to 2018 was collected by [Santa Barbara Term Ecological Research (SBC LTER) ](https://sbclter.msi.ucsb.edu/). Data collection began in 2012 and is ongoing. Abundance and size data is collected annually by divers in late summer across five survey locations along the mainland coast of the Santa Barbara Channel. Two locations (Isla Vista and Naples) are located within Marine Protected Areas (MPAs), while three locations (Arroyo Quemado, Mohawk and Carpenteria) are not. Mean spiny lobster length (mm) for MPA and non-MPA survey locations in 2012 and 2018 were compared by two-sample t-tests ($\alpha$ = 0.05). Analyses and figures were prepared using R software version 3.6.1. 
 
 # Results
 
@@ -50,7 +47,7 @@ lobster_tidy <- lobster_abundance %>%
 
 ### Results A: Marine Protected Area Impacts on Lobster Abundance Over Time
 
-The annual number of spiny lobsters observed at all sampling locations appears to have increased after the establishment of Marine Protected Areas. This sustainaed growth in abundance is especially pronounced for locations within MPAs (Isla Vista and Naples.)  The locations within MPAs were the only two locations to see an increase in the annual count of lobsters between 2017 and 2018. 
+The annual number of spiny lobsters observed at all sampling locations appears to have increased after the establishment of Marine Protected Areas. This sustained growth in abundance is especially pronounced for locations within MPAs (Isla Vista and Naples), matching predictions by Withy-Allen et al. (2013).  The locations within MPAs were the only two locations to see an increase in the annual count of lobsters between 2017 and 2018. 
 
 ```{r}
 # Group & summarize lobster data for each location by year
@@ -58,6 +55,8 @@ The annual number of spiny lobsters observed at all sampling locations appears t
 lobster_ysite <- lobster_tidy %>% 
   count(year, site) %>% 
   group_by(site)
+
+# Plot site abundance over time 
 
 ggplot(lobster_ysite, aes(x=year, y=n, group=site, color=site)) +
   geom_line() +
@@ -87,12 +86,16 @@ ggplot(lobster_ysite, aes(x=year, y=n, group=site, color=site)) +
 
 ### Results B: Marine Protected Area Impacts on Spiny Lobster Community Size Distributions
 
-After MPAs were established in 2012, a noticeable increase in community size has appeared for sites located within MPAs (Isla Vista and Naples.) The growth in community size can be contrasted with the non-MPA community size, which appears to have stayed relatively constant after MPAs were established. While the community size at Arroyo Quemado and Carpenteria appear to have slightly increased between 2012 and 2018, the community size at Mohawk appears to have slightly decreased. 
+After MPAs were established in 2012, a noticeable increase in community size (length in mm) has appeared for sites located within MPAs (Isla Vista and Naples.) The growth in community size can be contrasted with the non-MPA community size, which appears to have stayed relatively constant after MPAs were established. While the community size at Arroyo Quemado and Carpenteria appear to have slightly increased between 2012 and 2018, the community size at Mohawk appears to have slightly decreased. 
 
 ```{r}
 
+# Create 2012 & 2018 subsets
+
 lobster_size_diff <- lobster_tidy %>%
   filter(year == 2012 | year == 2018)
+
+# Plot size distribution in 2012 & 2018 with violin plots, overlaid with boxplots. 
   
 ggplot(lobster_size_diff, aes(x = site, y = size_mm)) +
          geom_violin(aes(fill = as.factor(year)), 
@@ -125,7 +128,8 @@ ggplot(lobster_size_diff, aes(x = site, y = size_mm)) +
 
 ```{r}
 
-# Assign MPA / non-MPA status 
+# Assign MPA / non-MPA status to groups
+
 lobster_mpa <- lobster_tidy %>%
   filter(site %in% c("IVEE", "NAPL"))
 
@@ -147,8 +151,6 @@ mpa_2012_count <- nrow(lobster_mpa_2012)
 
 lobster_non_mpa_2012 <- lobster_non_mpa %>% 
   filter(year == 2012)
-
-# Filter for 2018 in both data sets
 
 lobster_mpa_2018 <- lobster_mpa %>% 
   filter(year == 2018)
@@ -172,8 +174,6 @@ t_test_2012_directional <- t.test(lobster_mpa_2012$size_mm,
 
 mpa_nonmpa_2012_d <- cohen.d(lobster_non_mpa_2012$size_mm,lobster_mpa_2012$size_mm)
 
-# Medium effect (-.61)
-
 ```
 
 Mean spiny lobster lengths (mm) were compared for sites within Marine Protected Areas in 2012 (n = `r {nrow(lobster_mpa_2012)}`) shortly after the MPAs were established, and in 2018 (n = `r {nrow(lobster_mpa_2018)}`). Mean lengths were also compared for sites not within MPAs in 2012 (n = `r {nrow(lobster_non_mpa_2012)}`) and in 2018 (n = `r {nrow(lobster_non_mpa_2018)}`).
@@ -181,7 +181,10 @@ Mean spiny lobster lengths (mm) were compared for sites within Marine Protected 
 In 2012, the mean lobster size (mm) observed in MPA sites (`r round(t_test_2012_directional$estimate[1],2)`) is significantly less than mean lobster size for non-MPA (`r round(t_test_2012_directional$estimate[2],2)`) sites by a one-sided t-test (t(`r round(t_test_2012_directional$parameter,2)`) = `r round(t_test_2012_directional$statistic,2)`, *p* = `r round (t_test_2012_directional$p.value,2)`). The effect size by Cohen's *d* is medium (`r round(mpa_nonmpa_2012_d$estimate,2)`).
 
 ```{r}
+
 # Question 2 - For 2018 observations, is there a significant difference in lobster size between MPA and non-MPA sites? 
+
+# Two sided t test
 
 t_test_2018_size <- t.test(lobster_mpa_2018$size_mm, lobster_non_mpa_2018$size_mm)
 
@@ -197,9 +200,6 @@ t_test_2018_size_directional <- t.test(lobster_mpa_2018$size_mm,
 
 mpa_nonmpa_2018_d <- cohen.d(lobster_mpa_2018$size_mm,lobster_non_mpa_2018$size_mm)
 
-
-# Effect size small (.35)
-
 ```
 
 In 2018, the mean lobster size (mm) observed in MPA sites (`r round(t_test_2018_size_directional$estimate[1],2)`) is significantly greater than mean lobster size for non-MPA sites (`r round(t_test_2018_size_directional$estimate[2],2)`) by a one-sided t-test (t(`r round(t_test_2018_size_directional$parameter,2)`) = `r round(t_test_2018_size_directional$statistic,2)`, *p* = < 0.001). However, the effect size by Cohen's *d* is small (`r round(mpa_nonmpa_2018_d$estimate,2)`).
@@ -207,6 +207,8 @@ In 2018, the mean lobster size (mm) observed in MPA sites (`r round(t_test_2018_
 ```{r}
 
 # Question 3 - For MPA sites only, is there a significant mean size difference in lobsters observed in 2012 vs. 2018?
+
+# Two sided t test
 
 t_test_MPA_over_time <- t.test(lobster_mpa_2012$size_mm, lobster_mpa_2018$size_mm)
 
@@ -222,8 +224,6 @@ t_test_mpa_time_directional <- t.test(lobster_mpa_2018$size_mm,
 
 mpa_over_time_d <- cohen.d(lobster_mpa_2018$size_mm,lobster_mpa_2012$size_mm)
 
-# Effect large (.87)
-                                
 ```
 
 Mean lobster length (mm) observed at MPA sites in 2012 (`r round(t_test_MPA_over_time$estimate[1],2)`) and 2018 (`r round(t_test_MPA_over_time$estimate[2],2)`) also differed significantly, with lobster size in MPA sites significantly greater in 2018 than in 2012 by a one-sided t-test (t(`r round(t_test_mpa_time_directional$parameter,2)`) = `r round(t_test_MPA_over_time$statistic,2)`, *p* = < 0.001). The effect size by Cohen's *d* is large (`r round(mpa_over_time_d$estimate,2)`).
@@ -239,10 +239,13 @@ t_test_non_mpa_over_time <- t.test(lobster_non_mpa_2012$size_mm, lobster_non_mpa
 ```
 However, mean lobster size (mm) observed at non-MPA sites in 2012 (`r round(t_test_non_mpa_over_time$estimate[1],2)`) and 2018 (`r round(t_test_non_mpa_over_time$estimate[2],2)`) is not significantly different (t(`r round(t_test_non_mpa_over_time$parameter,2)`) = `r round(t_test_non_mpa_over_time$statistic,2)`, *p* = `r round (t_test_non_mpa_over_time$p.value,2)`)
 
+These results demonstrating an increase in spiny lobster community abundance and size in MPA sites are consistent with predictions by Withy-Allen et al. (2013) and observations from similar MPAs in the Santa Barbara Channel Islands (Kay et al. 2012.)
 
 ***Table 1.*** *Summary statistics (including mean loster length (mm), standard deviation and sample size for California spiny lobsters measured at five locations along the Santa Barbara Channel. Summary statistics are provided for sites within Marine Protected Areas (Isla Vista and Naples) and sites not within an MPA (Arroyo Quemado, Carpenteria and Mohawk).*
 
 ```{r}
+# Create table of summary statistics using datatable / DF
+
 name = c("MPA Sites", "MPA Sites", "Non-MPA Sites", "Non-MPA Sites")
 mean = c(round(mean(lobster_mpa_2012$size_mm), 
                digits = 3),
@@ -276,13 +279,17 @@ table_df_lobster
 # Summary
 
 - The abundance of California spiny lobsters has increased in the Santa Barbara Channel since the establishment of Marine Protected Areas (MPAs) in 2012 (see Figure 2.) These population increases were especially pronounced at sites within a Marine Protected Area (Isla Vista and Naples) (see Table 1).
-- Marine Protected Areas appear to have impacted the community size of spiny lobsters. Mean length of the lobsters observed at MPA sites increased by a statistically significant amount between 2012 and 2018 (see Table 1.)
+- Marine Protected Areas appear to have impacted the community size of spiny lobsters. Mean length of the lobsters observed at MPA sites increased by a statistically significant amount between 2012 and 2018 (see Table 1).
 - While the total abundance of lobsters observed at non-MPA sites increased between 2012 and 2018, there was no statistically significant difference in mean lobster length between 2012 and 2018.
 
 # References
 
-**Kay, M. C., Lenihan, H. S., Kotchen, M. J., & Miller, C. J. (2012).** Controlling for habitat
-confirms robust marine reserve effects and gradients of abundance near borders for California spiny lobster. Marine Ecology Progress Series, 451, 137e150.
+**California Department of Fish and Wildlife (2016)** *California Spiny Lobster Management Plan.* https://nrm.dfg.ca.gov/FileHandler.ashx?DocumentID=121938&inline. Accessed 11/17/2019. 
+
+**Kay, M. C., Lenihan, H. S., Kotchen, M. J., & Miller, C. J. (2012).** *Controlling for habitat
+confirms robust marine reserve effects and gradients of abundance near borders for California spiny lobster.* Marine Ecology Progress Series, 451, 137e150.
+
+**Reed D. (2019).** *SBC LTER: Reef: Abundance, size and fishing effort for California Spiny Lobster (Panulirus interruptus), ongoing since 2012.* Environmental Data Initiative. https://doi.org/10.6073/pasta/a593a675d644fdefb736750b291579a0. Dataset accessed 10/30/2019.
 
 **Withy-Allen, K. R., & Hovel, K. A. (2013).** *California spiny lobster (Panulirus interruptus) movement behaviour and habitat use: implications for the effectiveness
 of marine protected areas.* Marine and Freshwater Research, 64(4), 359e371.
