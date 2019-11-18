@@ -13,8 +13,9 @@ knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 
 # Methods
 
-# Results
+Data for California spiny lobster (Panulirus interruptus) abundance, length and location from 2012 was collected by [Santa Barbara Term Ecological Research (SBC LTER) ](https://sbclter.msi.ucsb.edu/). Abundance and size data is collected annually by divers in late summer across five survey locations. Two locations (Isla Vista and Naples) are located within Marine Protected Areas (MPAs), while three locations (Arroyo Quemado, Mohawk and Carpenteria) are not. Mean spiny lobster length (mm) for MPA and non-MPA survey locations in 2012 and 2018 were compared by two-sample t-tests. Analyses and figures were prepared using R software version 3.6.1. 
 
+# Results
 
 ```{r}
 # Load packages
@@ -78,7 +79,7 @@ ggplot(lobster_ysite, aes(x=year, y=n, group=site, color=site)) +
 
 ## Results B:
 
-The community size of sampled lobsters is relatively constant across site that are not Marine Protected Areas. The community size at Arroyo Quemado and Carpenteria appear to have slightly increased between 2012 and 2018, while the community size at Mohawk appears to have slightly decreased. However, the two MPA sites (Isla Vista and Naples) appear to have significant growth in community size between 2012 and 2018. 
+The community size of sampled lobsters is relatively constant across site that are not Marine Protected Areas. The community size at Arroyo Quemado and Carpenteria appear to have slightly increased between 2012 and 2018, while the community size at Mohawk appears to have slightly decreased. However, the two MPA sites (Isla Vista and Naples) have a larger community size in 2018 and than in 2012. 
 
 ```{r}
 
@@ -226,16 +227,17 @@ t_test_non_mpa_over_time <- t.test(lobster_non_mpa_2012$size_mm, lobster_non_mpa
 However, mean lobster size (mm) observed at non-MPA sites in 2012 (`r round(t_test_non_mpa_over_time$estimate[1],2)`) and 2018 (`r round(t_test_non_mpa_over_time$estimate[2],2)`) is not significantly different (t(`r round(t_test_non_mpa_over_time$parameter,2)`) = `r round(t_test_non_mpa_over_time$statistic,2)`, *p* = `r round (t_test_non_mpa_over_time$p.value,2)`)
 
 
-```{r}
+***Table 1.*** *Summary statistics (including mean loster length (mm), standard deviation and sample size for California spiny lobsters measured at five locations along the Santa Barbara Channel. Summary statistics are provided for sites within Marine Protected Areas (Isla Vista and Naples) and sites (Arroyo Quemado, Carpenteria and Mohawk) not within an MPA.*
 
-name = c("MPA Sites, 2012", "MPA Sites, 2018", "Non-MPA Sites, 2012", "Non-MPA Sites, 2018")
+```{r}
+name = c("MPA Sites", "MPA Sites", "Non-MPA Sites", "Non-MPA Sites")
 mean = c(round(mean(lobster_mpa_2012$size_mm), 
                digits = 3),
          round(mean(lobster_mpa_2018$size_mm), 
                digits = 3),
-         round(mean(lobster_mpa_2012$size_mm), 
+         round(mean(lobster_non_mpa_2012$size_mm), 
                digits = 3),
-         round(mean(lobster_mpa_2018$size_mm), 
+         round(mean(lobster_non_mpa_2018$size_mm), 
                digits = 3))
 sd = c(round(sd(lobster_mpa_2012$size_mm), 
              digits = 3),
@@ -243,27 +245,27 @@ sd = c(round(sd(lobster_mpa_2012$size_mm),
              digits = 3),
        round(sd(lobster_non_mpa_2012$size_mm), 
              digits = 3),
-       round(sd(lobster_non_mpa_2018$size_mm)))
+       round(sd(lobster_non_mpa_2018$size_mm),
+             digits = 3))
 count = c(nrow(lobster_mpa_2012),
            nrow(lobster_mpa_2018),
            nrow(lobster_non_mpa_2012),
            nrow(lobster_non_mpa_2018))
+year = c("2012", "2018", "2012", "2018")
 
-table_df_lobster <- data.frame(name, count, mean, sd) %>%
-  datatable(colnames = c("Site Type and Year", "Sample Size", "Mean Lobster Length (mm)", "Standard Deviation"), options = list(dom = 't'))
+table_df_lobster <- data.frame(name, year, count, mean, sd) %>%
+  datatable(colnames = c("Site Type", "Year", "Sample Size", "Mean Lobster Length (mm)", "Standard Deviation"),options = list(dom = 't'))
 
 table_df_lobster
 
 ```
 
 
-
 # Summary
 
-- The mean lobster length observed at Marine Protected Area (MPA) sites (Isla Vista and Naples) was smaller than the mean lobster length at non-MPA sites (Arroyo Quemado, Carpenteria and Mohawk) in 2012. However, the mean lobster length at MPA sites was greater than the mean length at non-MPA sites in 2018.  
-- At MPA sites, the number of lobsters observed increased between 2012 to 2018. The mean length of the lobsters observed at MPA sites also increased significantly over this time period.
-- The number of lobsters observed at non-MPA sites also increased between 2012 and 2018. However, there was no difference in mean lobster length between 2012 and 2018 for non-MPA sites. 
-
+- At Marine Protected Area (MPA) sites (Isla Vista and Naples), the number of lobsters observed increased substantially between 2012 to 2018 (see Table 1), with populations growing by 3,787.5% over the time period. 
+- The mean length of the lobsters observed at MPA sites also increased significantly between 2012 and 2018 (see Table 1.)
+- While the number of lobsters observed at non-MPA sites also increased between 2012 and 2018, observed populations only grew by 181.9%. There was no statistically significanty difference in mean lobster length between 2012 and 2018 for non-MPA sites. 
 
 # References
 
