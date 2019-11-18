@@ -178,7 +178,7 @@ mpa_nonmpa_2012_d <- cohen.d(lobster_non_mpa_2012$size_mm,lobster_mpa_2012$size_
 
 Mean spiny lobster lengths (mm) were compared for sites within Marine Protected Areas in 2012 (n = `r {nrow(lobster_mpa_2012)}`) shortly after the MPAs were established, and in 2018 (n = `r {nrow(lobster_mpa_2018)}`). Mean lengths were also compared for sites not within MPAs in 2012 (n = `r {nrow(lobster_non_mpa_2012)}`) and in 2018 (n = `r {nrow(lobster_non_mpa_2018)}`).
 
-In 2012, the mean lobster size (mm) observed in MPA sites (`r round(t_test_2012_directional$estimate[1],2)`) is significantly less than mean lobster size for non-MPA (`r round(t_test_2012_directional$estimate[2],2)`) sites by a one-sided t-test (t(`r round(t_test_2012_directional$parameter,2)`) = `r round(t_test_2012_directional$statistic,2)`, *p* = `r round (t_test_2012_directional$p.value,2)`). The effect size by Cohen's *d* is medium (`r round(mpa_nonmpa_2012_d$estimate,2)`).
+In 2012, the mean lobster size (mm) observed in MPA sites (`r round(t_test_2012_directional$estimate[1],2)`) is significantly less than mean lobster size for non-MPA (`r round(t_test_2012_directional$estimate[2],2)`) sites by a one-sided t-test (t(`r round(t_test_2012_directional$parameter,2)`) = `r round(t_test_2012_directional$statistic,2)`, *p* = `r round (t_test_2012_directional$p.value,3)`). The effect size by Cohen's *d* is medium (`r round(mpa_nonmpa_2012_d$estimate,2)`).
 
 ```{r}
 
